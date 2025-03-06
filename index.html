@@ -21,5 +21,66 @@
 <div>
 我是个好人111
 </div>
+  <div class="container">
+    <div class="language-switcher">
+        <button data-lang="en">English</button>
+        <button data-lang="es">Español</button>
+        <button data-lang="fr">Français</button>
+    </div>
+    <div class="text-container">
+        <p class="text-content"></p>
+        <button class="toggle-btn">Read More</button>
+    </div>
+</div>
 </body>
+  <style>
+    .text-content {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 初始显示2行 */
+    -webkit-box-orient: vertical;
+    line-height: 1.5;
+}
+
+.text-content.expanded {
+    -webkit-line-clamp: unset; /* 展开时取消行数限制 */
+}
+
+.toggle-btn {
+    display: none; /* 默认隐藏按钮 */
+    margin-top: 10px;
+}
+  </style>
+  <script>
+    const texts = {
+    en: { short: "This is a short description...", full: "This is a very long description..." },
+    es: { short: "Esta es una descripción corta...", full: "Esta es una descripción muy larga..." },
+    fr: { short: "Ceci est une courte description...", full: "Ceci est une description très longue..." }
+};
+
+const textContent = document.querySelector('.text-content');
+const toggleBtn = document.querySelector('.toggle-btn');
+const languageSwitcher = document.querySelector('.language-switcher');
+
+let currentLang = 'en';
+updateText();
+
+languageSwitcher.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+        currentLang = e.target.getAttribute('data-lang');
+        updateText();
+    }
+});
+    toggleBtn.addEventListener('click', () => {
+    textContent.classList.toggle('expanded');
+    toggleBtn.textContent = textContent.classList.contains('expanded') ? 'Read Less' : 'Read More';
+});
+
+function updateText() {
+    const textData = texts[currentLang];
+    textContent.textContent = textData.short;
+    textContent.setAttribute('data-full-text', textData.full);
+    toggleBtn.style.display = textData.full.length > 50 ? 'block' : 'none';
+}
+  </script>
 </html>
